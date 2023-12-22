@@ -107,7 +107,18 @@ export class MyStack extends Stack {
       },
       iamResources: ['*'],
       resultSelector: {
-        length: stepFunctions.JsonPath.arrayLength(stepFunctions.JsonPath.stringAt('$.TaskArns')),
+        length:
+        /**
+         * @ note: !!!
+         * Do not use stepFunctions.JsonPath.arrayLength('$.TaskArns')
+         * you will fail format
+         * Use stepFunctions.JsonPath.arrayLength(
+         * stepFunctions.JsonPath.stringAt('$.TaskArns')
+         * )
+        */
+        stepFunctions.JsonPath.arrayLength(
+          stepFunctions.JsonPath.stringAt('$.TaskArns'),
+        ),
       },
     });
 
