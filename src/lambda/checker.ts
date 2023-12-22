@@ -11,9 +11,9 @@ interface ReturnType {
 export async function handler(): Promise<ReturnType> {
 
   let res: ReturnType = {
-    PENDING: 0,
-    RUNNING: 0,
-    STOPPED: 0,
+    PENDING: 99999,
+    RUNNING: 99999,
+    STOPPED: 99999,
     ERRORCODE: 99999,
   };
   const family = `${process.env.Family}`;
@@ -64,8 +64,12 @@ export async function handler(): Promise<ReturnType> {
   } catch (error) {
     console.error(error);
   }
-
+  if (res.PENDING === 99999|| res.RUNNING === 99999 || res.STOPPED === 99999) {
+    res.ERRORCODE = 99999;
+    console.log('something error');
+  }
   console.log(res);
+
   // return 0 run ecs task
   // return 1 ~ 99999 do not run ecs task
   // return 99999, something error do not run ecs task;
