@@ -7,8 +7,8 @@ import * as targets from 'aws-cdk-lib/aws-events-targets';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as lambdaNodejs from 'aws-cdk-lib/aws-lambda-nodejs';
-import * as stepfunctions from 'aws-cdk-lib/aws-stepfunctions';
-import * as sftasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
+import * as stepFunctions from 'aws-cdk-lib/aws-stepfunctions';
+import * as sfTasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { Construct } from 'constructs';
 import { TaskJob } from './task-job';
 
@@ -63,33 +63,33 @@ export class MyStack extends Stack {
       ],
     });
 
-    const checkerHandlerNumber = new sftasks.LambdaInvoke(this, 'CheckerHandlerNumber', {
+    const checkerHandlerNumber = new sfTasks.LambdaInvoke(this, 'CheckerHandlerNumber', {
       lambdaFunction: checkerHandler,
       payloadResponseOnly: true,
     });
 
-    const choice = new stepfunctions.Choice(this, 'Need to run ECS task ?!', {
+    const choice = new stepFunctions.Choice(this, 'Need to run ECS task ?!', {
       inputPath: '$',
     });
 
-    const ecsRunTask = new sftasks.EcsRunTask(this, 'EcsRunTask', {
+    const ecsRunTask = new sfTasks.EcsRunTask(this, 'EcsRunTask', {
       cluster: cluster,
       taskDefinition: task.taskDefinition,
       securityGroups: [ecsCronJobSG],
       subnets: vpc.selectSubnets({ subnetType: ec2.SubnetType.PUBLIC }),
-      launchTarget: new sftasks.EcsFargateLaunchTarget(),
+      launchTarget: new sfTasks.EcsFargateLaunchTarget(),
       assignPublicIp: true,
     });
 
-    choice.when(stepfunctions.Condition.numberGreaterThanEquals('$.RUNNING', 1),
-      new stepfunctions.Succeed(this, 'Not need start ECS Task, Done')).when(
-      stepfunctions.Condition.numberEquals('$.ERRORCODE', 99999), new stepfunctions.Fail(this, 'Not need start ECS Task, Something error!!!'),
-    ).when(stepfunctions.Condition.numberLessThan('$.RUNNING', 1),
+    choice.when(stepFunctions.Condition.numberGreaterThanEquals('$.RUNNING', 1),
+      new stepFunctions.Succeed(this, 'Not need start ECS Task, Done')).when(
+      stepFunctions.Condition.numberEquals('$.ERRORCODE', 99999), new stepFunctions.Fail(this, 'Not need start ECS Task, Something error!!!'),
+    ).when(stepFunctions.Condition.numberLessThan('$.RUNNING', 1),
       ecsRunTask);
 
-    const machine = new stepfunctions.StateMachine(this, 'StateMachine', {
+    const machine = new stepFunctions.StateMachine(this, 'StateMachine', {
       stateMachineName: 'DemoStateMachineName',
-      definitionBody: stepfunctions.DefinitionBody.fromChainable(checkerHandlerNumber.next(choice)),
+      definitionBody: stepFunctions.DefinitionBody.fromChainable(checkerHandlerNumber.next(choice)),
     });
     new events.Rule(this, 'ScheduleRule', {
       schedule: events.Schedule.rate(Duration.days(1)),
@@ -97,7 +97,7 @@ export class MyStack extends Stack {
     });
 
     // Optional 2
-    const listTasks = new sftasks.CallAwsService(this, 'callListTasks', {
+    const listTasks = new sfTasks.CallAwsService(this, 'callListTasks', {
       service: 'ecs',
       action: 'listTasks',
       parameters: {
@@ -107,31 +107,31 @@ export class MyStack extends Stack {
       },
       iamResources: ['*'],
       resultSelector: {
-        length: stepfunctions.JsonPath.arrayLength(stepfunctions.JsonPath.stringAt('$.TaskArns')),
+        length: stepFunctions.JsonPath.arrayLength(stepFunctions.JsonPath.stringAt('$.TaskArns')),
       },
     });
 
-    const ecsRunTask2 = new sftasks.EcsRunTask(this, 'EcsRunTask2', {
+    const ecsRunTask2 = new sfTasks.EcsRunTask(this, 'EcsRunTask2', {
       cluster: cluster,
       taskDefinition: task.taskDefinition,
       securityGroups: [ecsCronJobSG],
       subnets: vpc.selectSubnets({ subnetType: ec2.SubnetType.PUBLIC }),
-      launchTarget: new sftasks.EcsFargateLaunchTarget(),
+      launchTarget: new sfTasks.EcsFargateLaunchTarget(),
       assignPublicIp: true,
     });
 
-    const choice2 = new stepfunctions.Choice(this, 'Need to run ECS task !?', {
+    const choice2 = new stepFunctions.Choice(this, 'Need to run ECS task !?', {
       inputPath: '$',
     });
 
-    choice2.when(stepfunctions.Condition.numberGreaterThanEquals('$.length', 1),
-      new stepfunctions.Succeed(this, 'Not need to start ECS Task, Done'))
-      .when(stepfunctions.Condition.numberLessThan('$.length', 1),
+    choice2.when(stepFunctions.Condition.numberGreaterThanEquals('$.length', 1),
+      new stepFunctions.Succeed(this, 'Not need to start ECS Task, Done'))
+      .when(stepFunctions.Condition.numberLessThan('$.length', 1),
         ecsRunTask2);
 
-    const machine2 = new stepfunctions.StateMachine(this, 'StateMachine2', {
+    const machine2 = new stepFunctions.StateMachine(this, 'StateMachine2', {
       stateMachineName: 'DemoStateMachineName2',
-      definitionBody: stepfunctions.DefinitionBody.fromChainable(listTasks.next(choice2)),
+      definitionBody: stepFunctions.DefinitionBody.fromChainable(listTasks.next(choice2)),
     });
 
     new events.Rule(this, 'ScheduleRule2', {
