@@ -1,12 +1,18 @@
+import * as path from 'path';
 import { App, Stack, StackProps, Duration } from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as targets from 'aws-cdk-lib/aws-events-targets';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as lambdaNodejs from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as stepfunctions from 'aws-cdk-lib/aws-stepfunctions';
 import * as sftasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import { Construct } from 'constructs';
 import { TaskJob } from './task-job';
+
+
 export class MyStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps = {}) {
     super(scope, id, props);
@@ -33,55 +39,59 @@ export class MyStack extends Stack {
       familyName: 'ecs-cron-job',
     });
 
-    const listTasks = new sftasks.CallAwsService(this, 'ListTasks', {
-      service: 'ecs',
-      action: 'listTasks',
-      parameters: {
+    const checkerHandler = new lambdaNodejs.NodejsFunction(this, 'CheckerHandler', {
+      functionName: `${Stack.of(this).stackName}-CheckerHandler`,
+      runtime: lambda.Runtime.NODEJS_20_X,
+      entry: path.join(__dirname, './lambda/checker.ts'),
+      handler: 'handler',
+      bundling: {
+        keepNames: true,
+        externalModules: ['@aws-sdk/client-ecs'],
+      },
+      environment: {
         Family: task.taskDefinition.family,
         Cluster: cluster.clusterName,
-        DesiredStatus: 'RUNNING',
       },
-      iamResources: [
-        cluster.clusterArn,
-        task.taskDefinition.taskDefinitionArn,
+      timeout: Duration.seconds(60),
+      memorySize: 512,
+      initialPolicy: [
+        new iam.PolicyStatement({
+          actions: ['ecs:ListTasks'],
+          resources: ['*'],
+        }),
       ],
-      taskTimeout: stepfunctions.Timeout.duration(Duration.seconds(10)),
-      resultSelector: {
-        'taskArns.$': '$.TaskArns',
-      },
-      outputPath: '$.taskArns',
     });
 
+    const checkerHandlerNumber = new sftasks.LambdaInvoke(this, 'CheckerHandlerNumber', {
+      lambdaFunction: checkerHandler,
+      payloadResponseOnly: true,
+    });
 
     const choice = new stepfunctions.Choice(this, 'Need to run ECS task ?!', {
-      inputPath: '$.taskArns',
+      inputPath: '$',
     });
 
-    const passItems = new stepfunctions.Pass(this, 'mapItems', {
-    });
-    passItems.next(new sftasks.EcsRunTask(this, 'EcsRunTask', {
+    const ecsRunTask = new sftasks.EcsRunTask(this, 'EcsRunTask', {
       cluster: cluster,
       taskDefinition: task.taskDefinition,
       securityGroups: [ecsCronJobSG],
       subnets: vpc.selectSubnets({ subnetType: ec2.SubnetType.PUBLIC }),
-      launchTarget: sftasks.EcsFargateLaunchTarget,
+      launchTarget: new sftasks.EcsFargateLaunchTarget(),
       assignPublicIp: true,
-    }));
+    });
 
-
-    const definition = stepfunctions.Chain.start(listTasks)
-      .next(choice.
-        when(stepfunctions.Condition.numberLessThan(stepfunctions.JsonPath.arrayLength('$.taskArns'), 1),
-          new stepfunctions.Succeed(this, 'Not need start ECS Task, Done'))
-        .when(stepfunctions.Condition.numberGreaterThanEquals(stepfunctions.JsonPath.arrayLength('$.taskArns'), 1),
-          passItems),
-      );
+    choice.when(stepfunctions.Condition.numberGreaterThanEquals('$.RUNNING', 1),
+      new stepfunctions.Succeed(this, 'Not need start ECS Task, Done')).when(
+      stepfunctions.Condition.numberEquals('$.ERRORCODE', 99999), new stepfunctions.Fail(this, 'Not need start ECS Task, Something error!!!'),
+    ).when(stepfunctions.Condition.numberLessThan('$.RUNNING', 1),
+      ecsRunTask);
 
     const machine = new stepfunctions.StateMachine(this, 'StateMachine', {
-      definitionBody: stepfunctions.DefinitionBody.fromChainable(definition),
+      stateMachineName: 'DemoStateMachineName',
+      definitionBody: stepfunctions.DefinitionBody.fromChainable(checkerHandlerNumber.next(choice)),
     });
     new events.Rule(this, 'ScheduleRule', {
-      schedule: events.Schedule.rate(Duration.minutes(2)),
+      schedule: events.Schedule.rate(Duration.days(1)),
       targets: [new targets.SfnStateMachine(machine)],
     });
   }

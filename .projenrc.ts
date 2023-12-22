@@ -5,9 +5,14 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   name: 'schedule-stepfunctions-run-ecs-task',
   projenrcTs: true,
 
-  // deps: [],                /* Runtime dependencies of this module. */
+  // deps: [],
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
-  // devDeps: [],             /* Build dependencies for this module. */
-  // packageName: undefined,  /* The "name" in package.json. */
+  devDeps: [
+    'esbuild',
+    '@aws-sdk/client-ecs',
+  ],
+  gitignore: [
+    'cdk.context.json',
+  ],
 });
 project.synth();
