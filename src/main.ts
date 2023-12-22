@@ -39,6 +39,7 @@ export class MyStack extends Stack {
       familyName: 'ecs-cron-job',
     });
 
+    // Optional 1: use lambda
     const checkerHandler = new lambdaNodejs.NodejsFunction(this, 'CheckerHandler', {
       functionName: `${Stack.of(this).stackName}-CheckerHandler`,
       runtime: lambda.Runtime.NODEJS_20_X,
@@ -93,6 +94,49 @@ export class MyStack extends Stack {
     new events.Rule(this, 'ScheduleRule', {
       schedule: events.Schedule.rate(Duration.days(1)),
       targets: [new targets.SfnStateMachine(machine)],
+    });
+
+    // Optional 2
+    const listTasks = new sftasks.CallAwsService(this, 'callListTasks', {
+      service: 'ecs',
+      action: 'listTasks',
+      parameters: {
+        Cluster: cluster.clusterName,
+        Family: task.taskDefinition.family,
+        DesiredStatus: 'RUNNING',
+      },
+      iamResources: ['*'],
+      resultSelector: {
+        length: stepfunctions.JsonPath.arrayLength(stepfunctions.JsonPath.stringAt('$.TaskArns')),
+      },
+    });
+
+    const ecsRunTask2 = new sftasks.EcsRunTask(this, 'EcsRunTask2', {
+      cluster: cluster,
+      taskDefinition: task.taskDefinition,
+      securityGroups: [ecsCronJobSG],
+      subnets: vpc.selectSubnets({ subnetType: ec2.SubnetType.PUBLIC }),
+      launchTarget: new sftasks.EcsFargateLaunchTarget(),
+      assignPublicIp: true,
+    });
+
+    const choice2 = new stepfunctions.Choice(this, 'Need to run ECS task !?', {
+      inputPath: '$',
+    });
+
+    choice2.when(stepfunctions.Condition.numberGreaterThanEquals('$.length', 1),
+      new stepfunctions.Succeed(this, 'Not need to start ECS Task, Done'))
+      .when(stepfunctions.Condition.numberLessThan('$.length', 1),
+        ecsRunTask2);
+
+    const machine2 = new stepfunctions.StateMachine(this, 'StateMachine2', {
+      stateMachineName: 'DemoStateMachineName2',
+      definitionBody: stepfunctions.DefinitionBody.fromChainable(listTasks.next(choice2)),
+    });
+
+    new events.Rule(this, 'ScheduleRule2', {
+      schedule: events.Schedule.rate(Duration.days(1)),
+      targets: [new targets.SfnStateMachine(machine2)],
     });
   }
 }
