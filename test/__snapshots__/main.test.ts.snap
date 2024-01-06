@@ -1,0 +1,1257 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot 1`] = `
+{
+  "Mappings": {
+    "ServiceprincipalMap": {
+      "af-south-1": {
+        "states": "states.af-south-1.amazonaws.com",
+      },
+      "ap-east-1": {
+        "states": "states.ap-east-1.amazonaws.com",
+      },
+      "ap-northeast-1": {
+        "states": "states.ap-northeast-1.amazonaws.com",
+      },
+      "ap-northeast-2": {
+        "states": "states.ap-northeast-2.amazonaws.com",
+      },
+      "ap-northeast-3": {
+        "states": "states.ap-northeast-3.amazonaws.com",
+      },
+      "ap-south-1": {
+        "states": "states.ap-south-1.amazonaws.com",
+      },
+      "ap-south-2": {
+        "states": "states.ap-south-2.amazonaws.com",
+      },
+      "ap-southeast-1": {
+        "states": "states.ap-southeast-1.amazonaws.com",
+      },
+      "ap-southeast-2": {
+        "states": "states.ap-southeast-2.amazonaws.com",
+      },
+      "ap-southeast-3": {
+        "states": "states.ap-southeast-3.amazonaws.com",
+      },
+      "ap-southeast-4": {
+        "states": "states.ap-southeast-4.amazonaws.com",
+      },
+      "ca-central-1": {
+        "states": "states.ca-central-1.amazonaws.com",
+      },
+      "cn-north-1": {
+        "states": "states.cn-north-1.amazonaws.com",
+      },
+      "cn-northwest-1": {
+        "states": "states.cn-northwest-1.amazonaws.com",
+      },
+      "eu-central-1": {
+        "states": "states.eu-central-1.amazonaws.com",
+      },
+      "eu-central-2": {
+        "states": "states.eu-central-2.amazonaws.com",
+      },
+      "eu-north-1": {
+        "states": "states.eu-north-1.amazonaws.com",
+      },
+      "eu-south-1": {
+        "states": "states.eu-south-1.amazonaws.com",
+      },
+      "eu-south-2": {
+        "states": "states.eu-south-2.amazonaws.com",
+      },
+      "eu-west-1": {
+        "states": "states.eu-west-1.amazonaws.com",
+      },
+      "eu-west-2": {
+        "states": "states.eu-west-2.amazonaws.com",
+      },
+      "eu-west-3": {
+        "states": "states.eu-west-3.amazonaws.com",
+      },
+      "il-central-1": {
+        "states": "states.il-central-1.amazonaws.com",
+      },
+      "me-central-1": {
+        "states": "states.me-central-1.amazonaws.com",
+      },
+      "me-south-1": {
+        "states": "states.me-south-1.amazonaws.com",
+      },
+      "sa-east-1": {
+        "states": "states.sa-east-1.amazonaws.com",
+      },
+      "us-east-1": {
+        "states": "states.us-east-1.amazonaws.com",
+      },
+      "us-east-2": {
+        "states": "states.us-east-2.amazonaws.com",
+      },
+      "us-gov-east-1": {
+        "states": "states.us-gov-east-1.amazonaws.com",
+      },
+      "us-gov-west-1": {
+        "states": "states.us-gov-west-1.amazonaws.com",
+      },
+      "us-iso-east-1": {
+        "states": "states.amazonaws.com",
+      },
+      "us-iso-west-1": {
+        "states": "states.amazonaws.com",
+      },
+      "us-isob-east-1": {
+        "states": "states.amazonaws.com",
+      },
+      "us-west-1": {
+        "states": "states.us-west-1.amazonaws.com",
+      },
+      "us-west-2": {
+        "states": "states.us-west-2.amazonaws.com",
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "CheckerHandler525C23BA": {
+      "DependsOn": [
+        "CheckerHandlerServiceRoleDefaultPolicy7F63F91D",
+        "CheckerHandlerServiceRole16E1C4AE",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
+          },
+          "S3Key": "d5114e39c017e77abb35a39c59cd13d1514f119dae6a4ca91a70d588f5abbee4.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+            "Cluster": {
+              "Ref": "ClusterEB0386A7",
+            },
+            "Family": "ecs-cron-job",
+          },
+        },
+        "FunctionName": "test-CheckerHandler",
+        "Handler": "index.handler",
+        "MemorySize": 512,
+        "Role": {
+          "Fn::GetAtt": [
+            "CheckerHandlerServiceRole16E1C4AE",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs20.x",
+        "Timeout": 60,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CheckerHandlerServiceRole16E1C4AE": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "CheckerHandlerServiceRoleDefaultPolicy7F63F91D": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ecs:ListTasks",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "CheckerHandlerServiceRoleDefaultPolicy7F63F91D",
+        "Roles": [
+          {
+            "Ref": "CheckerHandlerServiceRole16E1C4AE",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ClusterEB0386A7": {
+      "Properties": {
+        "ClusterName": "ecs-cron-job",
+      },
+      "Type": "AWS::ECS::Cluster",
+    },
+    "ScheduleRule247B9BD42": {
+      "Properties": {
+        "ScheduleExpression": "rate(1 day)",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Ref": "StateMachine21CE8E3CE",
+            },
+            "Id": "Target0",
+            "RoleArn": {
+              "Fn::GetAtt": [
+                "StateMachine2EventsRole15E7953A",
+                "Arn",
+              ],
+            },
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "ScheduleRuleDA5BD877": {
+      "Properties": {
+        "ScheduleExpression": "rate(1 day)",
+        "State": "ENABLED",
+        "Targets": [
+          {
+            "Arn": {
+              "Ref": "StateMachine2E01A3A5",
+            },
+            "Id": "Target0",
+            "RoleArn": {
+              "Fn::GetAtt": [
+                "StateMachineEventsRoleDBCDECD1",
+                "Arn",
+              ],
+            },
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+    "SecurityGroupDD263621": {
+      "Properties": {
+        "GroupDescription": "test/SecurityGroup",
+        "GroupName": "ecs-cron-job",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "demoVpcA7790D61",
+        },
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "StateMachine21CE8E3CE": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "StateMachine2RoleDefaultPolicy2E53EF04",
+        "StateMachine2Role6BE3CF0B",
+      ],
+      "Properties": {
+        "DefinitionString": {
+          "Fn::Join": [
+            "",
+            [
+              "{"StartAt":"callListTasks","States":{"callListTasks":{"Next":"Need to run ECS task !?","Type":"Task","ResultSelector":{"length.$":"States.ArrayLength($.TaskArns)"},"Resource":"arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":states:::aws-sdk:ecs:listTasks","Parameters":{"Cluster":"",
+              {
+                "Ref": "ClusterEB0386A7",
+              },
+              "","Family":"ecs-cron-job","DesiredStatus":"RUNNING"}},"Need to run ECS task !?":{"Type":"Choice","InputPath":"$","Choices":[{"Variable":"$.length","NumericGreaterThanEquals":1,"Next":"Not need to start ECS Task, Done"},{"Variable":"$.length","NumericLessThan":1,"Next":"EcsRunTask2"}]},"Not need to start ECS Task, Done":{"Type":"Succeed"},"EcsRunTask2":{"End":true,"Type":"Task","Resource":"arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":states:::ecs:runTask","Parameters":{"Cluster":"",
+              {
+                "Fn::GetAtt": [
+                  "ClusterEB0386A7",
+                  "Arn",
+                ],
+              },
+              "","TaskDefinition":"ecs-cron-job","NetworkConfiguration":{"AwsvpcConfiguration":{"AssignPublicIp":"ENABLED","Subnets":["",
+              {
+                "Ref": "demoVpcpublicSubnet1Subnet4C35EC4D",
+              },
+              "","",
+              {
+                "Ref": "demoVpcpublicSubnet2SubnetC319D99E",
+              },
+              ""],"SecurityGroups":["",
+              {
+                "Fn::GetAtt": [
+                  "SecurityGroupDD263621",
+                  "GroupId",
+                ],
+              },
+              ""]}},"LaunchType":"FARGATE"}}}}",
+            ],
+          ],
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "StateMachine2Role6BE3CF0B",
+            "Arn",
+          ],
+        },
+        "StateMachineName": "DemoStateMachineName2",
+      },
+      "Type": "AWS::StepFunctions::StateMachine",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "StateMachine2E01A3A5": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "StateMachineRoleDefaultPolicyDF1E6607",
+        "StateMachineRoleB840431D",
+      ],
+      "Properties": {
+        "DefinitionString": {
+          "Fn::Join": [
+            "",
+            [
+              "{"StartAt":"CheckerHandlerNumber","States":{"CheckerHandlerNumber":{"Next":"Need to run ECS task ?!","Retry":[{"ErrorEquals":["Lambda.ClientExecutionTimeoutException","Lambda.ServiceException","Lambda.AWSLambdaException","Lambda.SdkClientException"],"IntervalSeconds":2,"MaxAttempts":6,"BackoffRate":2}],"Type":"Task","Resource":"",
+              {
+                "Fn::GetAtt": [
+                  "CheckerHandler525C23BA",
+                  "Arn",
+                ],
+              },
+              ""},"Need to run ECS task ?!":{"Type":"Choice","InputPath":"$","Choices":[{"Variable":"$.RUNNING","NumericGreaterThanEquals":1,"Next":"Not need start ECS Task, Done"},{"Variable":"$.ERRORCODE","NumericEquals":99999,"Next":"Not need start ECS Task, Something error!!!"},{"Variable":"$.RUNNING","NumericLessThan":1,"Next":"EcsRunTask"}]},"Not need start ECS Task, Done":{"Type":"Succeed"},"Not need start ECS Task, Something error!!!":{"Type":"Fail"},"EcsRunTask":{"End":true,"Type":"Task","Resource":"arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":states:::ecs:runTask","Parameters":{"Cluster":"",
+              {
+                "Fn::GetAtt": [
+                  "ClusterEB0386A7",
+                  "Arn",
+                ],
+              },
+              "","TaskDefinition":"ecs-cron-job","NetworkConfiguration":{"AwsvpcConfiguration":{"AssignPublicIp":"ENABLED","Subnets":["",
+              {
+                "Ref": "demoVpcpublicSubnet1Subnet4C35EC4D",
+              },
+              "","",
+              {
+                "Ref": "demoVpcpublicSubnet2SubnetC319D99E",
+              },
+              ""],"SecurityGroups":["",
+              {
+                "Fn::GetAtt": [
+                  "SecurityGroupDD263621",
+                  "GroupId",
+                ],
+              },
+              ""]}},"LaunchType":"FARGATE"}}}}",
+            ],
+          ],
+        },
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "StateMachineRoleB840431D",
+            "Arn",
+          ],
+        },
+        "StateMachineName": "DemoStateMachineName",
+      },
+      "Type": "AWS::StepFunctions::StateMachine",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "StateMachine2EventsRole15E7953A": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "StateMachine2EventsRoleDefaultPolicy37363775": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "states:StartExecution",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "StateMachine21CE8E3CE",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "StateMachine2EventsRoleDefaultPolicy37363775",
+        "Roles": [
+          {
+            "Ref": "StateMachine2EventsRole15E7953A",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "StateMachine2Role6BE3CF0B": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::FindInMap": [
+                    "ServiceprincipalMap",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    "states",
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "StateMachine2RoleDefaultPolicy2E53EF04": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "ecs:listTasks",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": "ecs:RunTask",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Fn::Select": [
+                        1,
+                        {
+                          "Fn::Split": [
+                            ":",
+                            {
+                              "Ref": "TaskJobtaskDefinitionA55205B4",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    ":",
+                    {
+                      "Fn::Select": [
+                        2,
+                        {
+                          "Fn::Split": [
+                            ":",
+                            {
+                              "Ref": "TaskJobtaskDefinitionA55205B4",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    ":",
+                    {
+                      "Fn::Select": [
+                        3,
+                        {
+                          "Fn::Split": [
+                            ":",
+                            {
+                              "Ref": "TaskJobtaskDefinitionA55205B4",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    ":",
+                    {
+                      "Fn::Select": [
+                        4,
+                        {
+                          "Fn::Split": [
+                            ":",
+                            {
+                              "Ref": "TaskJobtaskDefinitionA55205B4",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    ":",
+                    {
+                      "Fn::Select": [
+                        0,
+                        {
+                          "Fn::Split": [
+                            "/",
+                            {
+                              "Fn::Select": [
+                                5,
+                                {
+                                  "Fn::Split": [
+                                    ":",
+                                    {
+                                      "Ref": "TaskJobtaskDefinitionA55205B4",
+                                    },
+                                  ],
+                                },
+                              ],
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    "/",
+                    {
+                      "Fn::Select": [
+                        1,
+                        {
+                          "Fn::Split": [
+                            "/",
+                            {
+                              "Fn::Select": [
+                                5,
+                                {
+                                  "Fn::Split": [
+                                    ":",
+                                    {
+                                      "Ref": "TaskJobtaskDefinitionA55205B4",
+                                    },
+                                  ],
+                                },
+                              ],
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": [
+                "ecs:StopTask",
+                "ecs:DescribeTasks",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": "iam:PassRole",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "TaskJobtaskDefinitionTaskRoleFA54B7C6",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::GetAtt": [
+                    "TaskJobtaskDefinitionExecutionRoleE0389C40",
+                    "Arn",
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "StateMachine2RoleDefaultPolicy2E53EF04",
+        "Roles": [
+          {
+            "Ref": "StateMachine2Role6BE3CF0B",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "StateMachineEventsRoleDBCDECD1": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "events.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "StateMachineEventsRoleDefaultPolicyFB602CA9": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "states:StartExecution",
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "StateMachine2E01A3A5",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "StateMachineEventsRoleDefaultPolicyFB602CA9",
+        "Roles": [
+          {
+            "Ref": "StateMachineEventsRoleDBCDECD1",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "StateMachineRoleB840431D": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": {
+                  "Fn::FindInMap": [
+                    "ServiceprincipalMap",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    "states",
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "StateMachineRoleDefaultPolicyDF1E6607": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "lambda:InvokeFunction",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "CheckerHandler525C23BA",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "CheckerHandler525C23BA",
+                          "Arn",
+                        ],
+                      },
+                      ":*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "ecs:RunTask",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Fn::Select": [
+                        1,
+                        {
+                          "Fn::Split": [
+                            ":",
+                            {
+                              "Ref": "TaskJobtaskDefinitionA55205B4",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    ":",
+                    {
+                      "Fn::Select": [
+                        2,
+                        {
+                          "Fn::Split": [
+                            ":",
+                            {
+                              "Ref": "TaskJobtaskDefinitionA55205B4",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    ":",
+                    {
+                      "Fn::Select": [
+                        3,
+                        {
+                          "Fn::Split": [
+                            ":",
+                            {
+                              "Ref": "TaskJobtaskDefinitionA55205B4",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    ":",
+                    {
+                      "Fn::Select": [
+                        4,
+                        {
+                          "Fn::Split": [
+                            ":",
+                            {
+                              "Ref": "TaskJobtaskDefinitionA55205B4",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    ":",
+                    {
+                      "Fn::Select": [
+                        0,
+                        {
+                          "Fn::Split": [
+                            "/",
+                            {
+                              "Fn::Select": [
+                                5,
+                                {
+                                  "Fn::Split": [
+                                    ":",
+                                    {
+                                      "Ref": "TaskJobtaskDefinitionA55205B4",
+                                    },
+                                  ],
+                                },
+                              ],
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    "/",
+                    {
+                      "Fn::Select": [
+                        1,
+                        {
+                          "Fn::Split": [
+                            "/",
+                            {
+                              "Fn::Select": [
+                                5,
+                                {
+                                  "Fn::Split": [
+                                    ":",
+                                    {
+                                      "Ref": "TaskJobtaskDefinitionA55205B4",
+                                    },
+                                  ],
+                                },
+                              ],
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": [
+                "ecs:StopTask",
+                "ecs:DescribeTasks",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": "iam:PassRole",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "TaskJobtaskDefinitionTaskRoleFA54B7C6",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::GetAtt": [
+                    "TaskJobtaskDefinitionExecutionRoleE0389C40",
+                    "Arn",
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "StateMachineRoleDefaultPolicyDF1E6607",
+        "Roles": [
+          {
+            "Ref": "StateMachineRoleB840431D",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "TaskJoblogGroupC7552F63": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "LogGroupName": "/aws/ecs/ecs-cron-job",
+        "RetentionInDays": 731,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TaskJobtaskDefinitionA55205B4": {
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Essential": true,
+            "Image": {
+              "Fn::Sub": "\${AWS::AccountId}.dkr.ecr.\${AWS::Region}.\${AWS::URLSuffix}/cdk-hnb659fds-container-assets-\${AWS::AccountId}-\${AWS::Region}:fa46e92bf9d42e8455d688eb4749b04c9d9a76bceecb855d84fc53e6985cb8bb",
+            },
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "TaskJoblogGroupC7552F63",
+                },
+                "awslogs-region": {
+                  "Ref": "AWS::Region",
+                },
+                "awslogs-stream-prefix": "ecs-cron-job",
+              },
+            },
+            "Name": "container",
+          },
+        ],
+        "Cpu": "256",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "TaskJobtaskDefinitionExecutionRoleE0389C40",
+            "Arn",
+          ],
+        },
+        "Family": "ecs-cron-job",
+        "Memory": "512",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE",
+        ],
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "TaskJobtaskDefinitionTaskRoleFA54B7C6",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::TaskDefinition",
+    },
+    "TaskJobtaskDefinitionExecutionRoleDefaultPolicyC9F28C3E": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition",
+                    },
+                    ":ecr:",
+                    {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":repository/",
+                    {
+                      "Fn::Sub": "cdk-hnb659fds-container-assets-\${AWS::AccountId}-\${AWS::Region}",
+                    },
+                  ],
+                ],
+              },
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "TaskJoblogGroupC7552F63",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "TaskJobtaskDefinitionExecutionRoleDefaultPolicyC9F28C3E",
+        "Roles": [
+          {
+            "Ref": "TaskJobtaskDefinitionExecutionRoleE0389C40",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "TaskJobtaskDefinitionExecutionRoleE0389C40": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "TaskJobtaskDefinitionTaskRoleDefaultPolicy9E9EEBDF": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "logs:*",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "TaskJoblogGroupC7552F63",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "TaskJobtaskDefinitionTaskRoleDefaultPolicy9E9EEBDF",
+        "Roles": [
+          {
+            "Ref": "TaskJobtaskDefinitionTaskRoleFA54B7C6",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "TaskJobtaskDefinitionTaskRoleFA54B7C6": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "demoVpcA7790D61": {
+      "Properties": {
+        "CidrBlock": "10.0.0.0/16",
+        "EnableDnsHostnames": true,
+        "EnableDnsSupport": true,
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test/demoVpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::VPC",
+    },
+    "demoVpcIGWD625595B": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test/demoVpc",
+          },
+        ],
+      },
+      "Type": "AWS::EC2::InternetGateway",
+    },
+    "demoVpcVPCGWAD721FE3": {
+      "Properties": {
+        "InternetGatewayId": {
+          "Ref": "demoVpcIGWD625595B",
+        },
+        "VpcId": {
+          "Ref": "demoVpcA7790D61",
+        },
+      },
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+    },
+    "demoVpcpublicSubnet1DefaultRouteC50C8201": {
+      "DependsOn": [
+        "demoVpcVPCGWAD721FE3",
+      ],
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "demoVpcIGWD625595B",
+        },
+        "RouteTableId": {
+          "Ref": "demoVpcpublicSubnet1RouteTable2B22748C",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "demoVpcpublicSubnet1RouteTable2B22748C": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test/demoVpc/publicSubnet1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "demoVpcA7790D61",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "demoVpcpublicSubnet1RouteTableAssociation38F4AD79": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "demoVpcpublicSubnet1RouteTable2B22748C",
+        },
+        "SubnetId": {
+          "Ref": "demoVpcpublicSubnet1Subnet4C35EC4D",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "demoVpcpublicSubnet1Subnet4C35EC4D": {
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            0,
+            {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.0.0/24",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "public",
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          {
+            "Key": "Name",
+            "Value": "test/demoVpc/publicSubnet1",
+          },
+        ],
+        "VpcId": {
+          "Ref": "demoVpcA7790D61",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+    "demoVpcpublicSubnet2DefaultRoute5F3F5D36": {
+      "DependsOn": [
+        "demoVpcVPCGWAD721FE3",
+      ],
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "demoVpcIGWD625595B",
+        },
+        "RouteTableId": {
+          "Ref": "demoVpcpublicSubnet2RouteTableDC07FC05",
+        },
+      },
+      "Type": "AWS::EC2::Route",
+    },
+    "demoVpcpublicSubnet2RouteTableAssociationB86212A6": {
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "demoVpcpublicSubnet2RouteTableDC07FC05",
+        },
+        "SubnetId": {
+          "Ref": "demoVpcpublicSubnet2SubnetC319D99E",
+        },
+      },
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+    },
+    "demoVpcpublicSubnet2RouteTableDC07FC05": {
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "test/demoVpc/publicSubnet2",
+          },
+        ],
+        "VpcId": {
+          "Ref": "demoVpcA7790D61",
+        },
+      },
+      "Type": "AWS::EC2::RouteTable",
+    },
+    "demoVpcpublicSubnet2SubnetC319D99E": {
+      "Properties": {
+        "AvailabilityZone": {
+          "Fn::Select": [
+            1,
+            {
+              "Fn::GetAZs": "",
+            },
+          ],
+        },
+        "CidrBlock": "10.0.1.0/24",
+        "MapPublicIpOnLaunch": true,
+        "Tags": [
+          {
+            "Key": "aws-cdk:subnet-name",
+            "Value": "public",
+          },
+          {
+            "Key": "aws-cdk:subnet-type",
+            "Value": "Public",
+          },
+          {
+            "Key": "Name",
+            "Value": "test/demoVpc/publicSubnet2",
+          },
+        ],
+        "VpcId": {
+          "Ref": "demoVpcA7790D61",
+        },
+      },
+      "Type": "AWS::EC2::Subnet",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
