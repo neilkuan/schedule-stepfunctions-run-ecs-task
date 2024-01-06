@@ -4,9 +4,6 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   defaultReleaseBranch: 'main',
   name: 'schedule-stepfunctions-run-ecs-task',
   projenrcTs: true,
-
-  // deps: [],
-  // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   devDeps: [
     'esbuild',
     '@aws-sdk/client-ecs',
@@ -14,5 +11,14 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   gitignore: [
     'cdk.context.json',
   ],
+  depsUpgradeOptions: {
+    workflowOptions: {
+      labels: ['auto-approve'],
+    },
+  },
+  autoApproveOptions: {
+    secret: 'GITHUB_TOKEN',
+    allowedUsernames: ['neilkuan'],
+  },
 });
 project.synth();
