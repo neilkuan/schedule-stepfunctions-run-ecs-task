@@ -18,7 +18,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   },
   autoApproveOptions: {
     secret: 'GITHUB_TOKEN',
-    allowedUsernames: ['neilkuan'],
+    allowedUsernames: ['neilkuan', 'auto-machine'],
   },
 });
 project.synth();
